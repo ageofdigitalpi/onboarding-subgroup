@@ -1,0 +1,115 @@
+#%RAML 0.8
+title: Existing customer on-boarding API
+version: 1.0
+baseUri: http://onboarding-buk.cloudhub.io/api
+
+/card:
+  /find:
+    post:
+      description: Find card details from number, NFC read or picture
+      body:
+        application/json:
+          example: |
+            {
+              "cardNumber": "4657-4726-7653-8927",
+              "validFromDate": "01/14", 
+              "expiryDate": "08/16",
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "result": "card valid"
+                }
+        404:
+          body:
+            application/json:
+              example: |
+                {
+                  "result": "invalid card"
+                }
+  /validate:
+    post:
+      description: Validate identity with card details and PIN
+      body:
+        application/json:
+          example: |
+            {
+              "cardNumber": "4657-4726-7653-8927"
+              "validFromDate": "01/14", 
+              "expiryDate": "08/16",
+              "pin": "7837"
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "result": "PIN valid"
+                }
+        404:
+          body:
+            application/json:
+              example: |
+                {
+                  "result": "invalid PIN"
+                }
+  
+/account:
+  /find:
+    post:
+      description: Find account details from sort code and account number
+      body:
+        application/json:
+          example: |
+            {
+              "sortCode": "20-34-50",
+              "accountNumber": "87654398"
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "result": "account valid",
+                  "challengeQuestion": "Confirm your DOB",
+                  "challengeId": 1234
+                }
+        404:
+          body:
+            application/json:
+              example: |
+                {
+                  "result": "invalid account"
+                }
+  /validate:
+    post:
+      description: Validate identity response to challenge question
+      body:
+        application/json:
+          example: |
+            {
+              "challengeId": 1234,
+              "response": "04/11/1981"
+            }
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {
+                  "result": "challenge answer correct"
+                }
+        404:
+          body:
+            application/json:
+              example: |
+                {
+                  "result": "invalid challenge answer"
+                }
+  
+      
